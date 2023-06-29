@@ -67,6 +67,31 @@ const Row: React.FC<RowProps> = ({ item, headers, variation, refreshData }) => {
         setOpenModalDelete(false);
     };
 
+    const formattedValue = (value: any) => {
+        const result = Number(value).toLocaleString("pt-BR", {
+            currency: "BRL",
+            style: "currency",
+        });
+        console.log(result);
+        return result;
+    };
+
+    const formattedLicense = (license: any) => {
+        const formattedLicensePlate = license.replace(
+            /(\w{3})(\w{4})/,
+            "$1-$2"
+        );
+        return formattedLicensePlate;
+    };
+
+    const formattedRenavam = (renavam: any) => {
+        const formattedRenavam = renavam.replace(
+            /(\d{4})(\d{6})(\d{1})/,
+            "$1.$2-$3"
+        );
+        return formattedRenavam;
+    };
+
     return (
         <tr className="hover">
             {headers.map((header, index) => {
@@ -76,11 +101,13 @@ const Row: React.FC<RowProps> = ({ item, headers, variation, refreshData }) => {
                 } else if (header === "name") {
                     value = item.name || "";
                 } else if (header === "renavam") {
-                    value = item.renavam ? item.renavam.toString() : "";
+                    value = item.renavam
+                        ? formattedRenavam(item.renavam.toString())
+                        : "";
                 } else if (header === "license") {
-                    value = item.license || "";
+                    value = formattedLicense(item.license) || "";
                 } else if (header === "price") {
-                    value = item.price ? item.price.toString() : "";
+                    value = item.price ? formattedValue(newItem.price) : "";
                 } else if (header === "year") {
                     value = item.year || "";
                 } else if (header === "id model") {
