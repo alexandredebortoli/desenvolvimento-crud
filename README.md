@@ -51,7 +51,7 @@ Para baixar as dependências do projeto, siga as instruções abaixo:
 Após a instalação das dependências e a criação do banco de dados, você pode iniciar o servidor de desenvolvimento do back-end com o seguinte comando:
 
 ``` bash
-yarn dev
+yarn start:dev
 ```
 
 Isso iniciará o servidor de desenvolvimento do NestJS e o back-end estará acessível em http://localhost:3010.
