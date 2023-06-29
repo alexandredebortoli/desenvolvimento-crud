@@ -15,19 +15,36 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const cars = await getAllCars();
-                setCarData(cars);
-                const models = await getAllModels();
-                setModelData(models);
-                const brands = await getAllBrands();
-                setBrandData(brands);
+                setCarData(await getAllCars());
+                setModelData(await getAllModels());
+                setBrandData(await getAllBrands());
             } catch (error) {
-                console.error("Error fetching car data:", error);
+                console.error("Error fetching data:", error);
             }
         };
 
         fetchData();
     }, []);
+
+    const refreshData = async () => {
+        try {
+            switch (selectedOption) {
+                case "car":
+                    setCarData(await getAllCars());
+                    break;
+                case "model":
+                    setModelData(await getAllModels());
+                    break;
+                case "brand":
+                    setBrandData(await getAllBrands());
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
     const handleOptionChange = (option: string) => {
         setSelectedOption(option);
@@ -64,6 +81,7 @@ const HomePage: React.FC = () => {
                 tableData={tableData}
                 tableHeaders={tableHeaders}
                 variation={selectedOption}
+                refreshData={refreshData}
             />
         </div>
     );

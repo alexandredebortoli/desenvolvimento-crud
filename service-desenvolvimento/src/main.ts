@@ -24,8 +24,8 @@ async function bootstrap() {
 
   app.use(cors());
 
-  await app.listen(5000, () => {
-    Logger.log(`Server running at http://localhost:5000`);
+  await app.listen(3010, () => {
+    Logger.log(`Server running at http://localhost:3010`);
   });
 }
 bootstrap();

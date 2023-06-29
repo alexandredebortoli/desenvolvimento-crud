@@ -3,7 +3,6 @@
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Modal from "./Modal";
 import { FormEventHandler, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
     deleteBrand,
     deleteCar,
@@ -17,10 +16,10 @@ interface RowProps {
     item: any;
     headers: string[];
     variation: string;
+    refreshData: any;
 }
 
-const Row: React.FC<RowProps> = ({ item, headers, variation }) => {
-    const router = useRouter();
+const Row: React.FC<RowProps> = ({ item, headers, variation, refreshData }) => {
     const [openModalEdit, setOpenModalEdit] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -42,7 +41,7 @@ const Row: React.FC<RowProps> = ({ item, headers, variation }) => {
                 await editBrand(id, editedItem);
                 break;
         }
-        router.refresh();
+        refreshData();
         setOpenModalEdit(false);
     };
 
@@ -62,15 +61,15 @@ const Row: React.FC<RowProps> = ({ item, headers, variation }) => {
                     await deleteBrand(item.id);
                     break;
             }
+            refreshData();
             setDeleteConfirm(false);
-            router.refresh();
         }
         setOpenModalDelete(false);
     };
 
     return (
         <tr className="hover">
-            {headers.map((header) => {
+            {headers.map((header, index) => {
                 let value = "";
                 if (header === "id") {
                     value = item.id ? item.id.toString() : "";
@@ -89,11 +88,14 @@ const Row: React.FC<RowProps> = ({ item, headers, variation }) => {
                 } else if (header === "id brand") {
                     value = item.idBrand ? item.idBrand.toString() : "";
                 }
-                return <td key={header}>{value}</td>;
+                return <td key={index}>{value}</td>;
             })}
             <td className="flex justify-end gap-5">
                 <FiEdit
-                    onClick={() => setOpenModalEdit(true)}
+                    onClick={() => {
+                        setOpenModalEdit(true);
+                        setNewItem({ ...item });
+                    }}
                     cursor="pointer"
                     size={23}
                 />
@@ -104,7 +106,7 @@ const Row: React.FC<RowProps> = ({ item, headers, variation }) => {
                     <form onSubmit={handleSubmitEditItem}>
                         <h3 className="font-bold text-lg">Edit {item.name}</h3>
                         <div className="modal-action flex flex-col justify-center align-center">
-                            {headers.map((header) => {
+                            {headers.map((header, index) => {
                                 let value = "";
                                 if (header === "id") {
                                     return null;
@@ -133,6 +135,7 @@ const Row: React.FC<RowProps> = ({ item, headers, variation }) => {
                                 }
                                 return (
                                     <div
+                                        key={index}
                                         className="form-control w-full mb-5"
                                         style={{
                                             marginLeft: 0,
@@ -146,64 +149,112 @@ const Row: React.FC<RowProps> = ({ item, headers, variation }) => {
                                                 key={header}
                                                 value={value}
                                                 onChange={(e) => {
-                                                    if (header === "name") {
-                                                        setNewItem({
-                                                            ...newItem,
-                                                            name: e.target
-                                                                .value,
-                                                        });
-                                                    } else if (
-                                                        header === "renavam"
-                                                    ) {
-                                                        setNewItem({
-                                                            ...newItem,
-                                                            renavam: Number(
-                                                                e.target.value
-                                                            ),
-                                                        });
-                                                    } else if (
-                                                        header === "license"
-                                                    ) {
-                                                        setNewItem({
-                                                            ...newItem,
-                                                            license:
-                                                                e.target.value,
-                                                        });
-                                                    } else if (
-                                                        header === "price"
-                                                    ) {
-                                                        setNewItem({
-                                                            ...newItem,
-                                                            price: Number(
-                                                                e.target.value
-                                                            ),
-                                                        });
-                                                    } else if (
-                                                        header === "year"
-                                                    ) {
-                                                        setNewItem({
-                                                            ...newItem,
-                                                            year: e.target
-                                                                .value,
-                                                        });
-                                                    } else if (
-                                                        header === "id model"
-                                                    ) {
-                                                        setNewItem({
-                                                            ...newItem,
-                                                            idModel: Number(
-                                                                e.target.value
-                                                            ),
-                                                        });
-                                                    } else if (
-                                                        header === "id brand"
-                                                    ) {
-                                                        setNewItem({
-                                                            ...newItem,
-                                                            idBrand: Number(
-                                                                e.target.value
-                                                            ),
-                                                        });
+                                                    switch (variation) {
+                                                        case "car":
+                                                            if (
+                                                                header ===
+                                                                "name"
+                                                            ) {
+                                                                setNewItem({
+                                                                    ...newItem,
+                                                                    name: e
+                                                                        .target
+                                                                        .value,
+                                                                });
+                                                            } else if (
+                                                                header ===
+                                                                "renavam"
+                                                            ) {
+                                                                setNewItem({
+                                                                    ...newItem,
+                                                                    renavam:
+                                                                        Number(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        ),
+                                                                });
+                                                            } else if (
+                                                                header ===
+                                                                "license"
+                                                            ) {
+                                                                setNewItem({
+                                                                    ...newItem,
+                                                                    license:
+                                                                        e.target
+                                                                            .value,
+                                                                });
+                                                            } else if (
+                                                                header ===
+                                                                "price"
+                                                            ) {
+                                                                setNewItem({
+                                                                    ...newItem,
+                                                                    price: Number(
+                                                                        e.target
+                                                                            .value
+                                                                    ),
+                                                                });
+                                                            } else if (
+                                                                header ===
+                                                                "year"
+                                                            ) {
+                                                                setNewItem({
+                                                                    ...newItem,
+                                                                    year: e
+                                                                        .target
+                                                                        .value,
+                                                                });
+                                                            } else if (
+                                                                header ===
+                                                                "id model"
+                                                            ) {
+                                                                setNewItem({
+                                                                    ...newItem,
+                                                                    idModel:
+                                                                        Number(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        ),
+                                                                });
+                                                            }
+                                                            break;
+                                                        case "model":
+                                                            if (
+                                                                header ===
+                                                                "name"
+                                                            ) {
+                                                                setNewItem({
+                                                                    ...newItem,
+                                                                    name: e
+                                                                        .target
+                                                                        .value,
+                                                                });
+                                                            } else if (
+                                                                header ===
+                                                                "id brand"
+                                                            ) {
+                                                                setNewItem({
+                                                                    ...newItem,
+                                                                    idBrand:
+                                                                        Number(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        ),
+                                                                });
+                                                            }
+                                                            break;
+                                                        case "brand":
+                                                            setNewItem({
+                                                                ...newItem,
+                                                                name: e.target
+                                                                    .value,
+                                                            });
+                                                            break;
+                                                        default:
+                                                            break;
                                                     }
                                                 }}
                                                 type={
@@ -211,7 +262,6 @@ const Row: React.FC<RowProps> = ({ item, headers, variation }) => {
                                                         ? "text"
                                                         : "number"
                                                 }
-                                                placeholder={header}
                                                 className="input input-bordered w-full"
                                             />
                                         </label>

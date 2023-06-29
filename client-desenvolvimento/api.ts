@@ -2,7 +2,7 @@ import { IBrand } from "./types/brand";
 import { ICar } from "./types/car";
 import { IModel } from "./types/model";
 
-const baseUrl = "http://localhost:3005";
+const baseUrl = "http://localhost:3010";
 
 export const getAllBrands = async (): Promise<IBrand[]> => {
     const res = await fetch(`${baseUrl}/brand`, { cache: "no-store" });

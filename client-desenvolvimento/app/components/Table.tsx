@@ -5,9 +5,15 @@ type TableProps = {
     data: any[];
     headers: string[];
     variation: string;
+    refreshData: any;
 };
 
-const Table: React.FC<TableProps> = ({ data, headers, variation }) => {
+const Table: React.FC<TableProps> = ({
+    data,
+    headers,
+    variation,
+    refreshData,
+}) => {
     return (
         <table className="table w-full table-normal">
             <thead>
@@ -25,6 +31,7 @@ const Table: React.FC<TableProps> = ({ data, headers, variation }) => {
                         item={item}
                         headers={headers}
                         variation={variation}
+                        refreshData={refreshData}
                     />
                 ))}
             </tbody>

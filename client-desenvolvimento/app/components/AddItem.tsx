@@ -4,17 +4,16 @@ import { TbSquareRoundedPlus } from "react-icons/tb";
 import Modal from "./Modal";
 import React, { FormEventHandler, useState } from "react";
 import { createBrand, createCar, createModel } from "@/api";
-import { useRouter } from "next/navigation";
 import { IBrand } from "@/types/brand";
 import { IModel } from "@/types/model";
 import { ICar } from "@/types/car";
 
 type AddItemProps = {
     variation: string;
+    refreshData: any;
 };
 
-const AddItem: React.FC<AddItemProps> = ({ variation }) => {
-    const router = useRouter();
+const AddItem: React.FC<AddItemProps> = ({ variation, refreshData }) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [newBrand, setNewBrand] = useState<IBrand>({});
     const [newModel, setNewModel] = useState<IModel>({});
@@ -40,6 +39,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
             default:
                 break;
         }
+        refreshData();
         setModalOpen(false);
     };
 
@@ -57,7 +57,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                             })
                         }
                         type="text"
-                        placeholder="Ford"
+                        placeholder="Brand name"
                         className="input input-bordered w-full"
                     />
                 </label>
@@ -78,7 +78,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                                 })
                             }
                             type="text"
-                            placeholder="735i/iA 3.5 32V"
+                            placeholder="Model name"
                             className="input input-bordered w-full"
                         />
                     </label>
@@ -95,7 +95,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                                 })
                             }
                             type="number"
-                            placeholder="3"
+                            placeholder="Brand id (Number)"
                             className="input input-bordered w-full"
                         />
                     </label>
@@ -117,7 +117,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                                 })
                             }
                             type="text"
-                            placeholder="BMW 735i"
+                            placeholder="Car name"
                             className="input input-bordered w-full"
                         />
                     </label>
@@ -134,7 +134,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                                 })
                             }
                             type="text"
-                            placeholder="1147483645"
+                            placeholder="Car renavam"
                             className="input input-bordered w-full"
                         />
                     </label>
@@ -151,14 +151,14 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                                 })
                             }
                             type="text"
-                            placeholder="MAX-4948"
+                            placeholder="Car license"
                             className="input input-bordered w-full"
                         />
                     </label>
                 </div>
                 <div className="form-control w-full mb-5">
                     <label className="input-group">
-                        <span className="whitespace-nowrap">{`Price ($BRL)`}</span>
+                        <span className="whitespace-nowrap">{`Price`}</span>
                         <input
                             value={newCar.price}
                             onChange={(e) =>
@@ -168,7 +168,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                                 })
                             }
                             type="text"
-                            placeholder="12000,50"
+                            placeholder="Car price (BRL)"
                             className="input input-bordered w-full"
                         />
                     </label>
@@ -185,7 +185,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                                 })
                             }
                             type="text"
-                            placeholder="1987"
+                            placeholder="Car year"
                             className="input input-bordered w-full"
                         />
                     </label>
@@ -202,7 +202,7 @@ const AddItem: React.FC<AddItemProps> = ({ variation }) => {
                                 })
                             }
                             type="number"
-                            placeholder="1"
+                            placeholder="Model id (Number)"
                             className="input input-bordered w-full"
                         />
                     </label>
