@@ -11,7 +11,7 @@ export class CarInputDTO {
 
   @ApiPropertyOptional({
     type: Number,
-    example: 123456,
+    example: 12345678910,
   })
   @IsNumber()
   renavam?: number;

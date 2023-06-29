@@ -15,7 +15,7 @@ export class Car {
   @Column({ length: 50 })
   name: string;
 
-  @Column()
+  @Column({ precision: 11 })
   renavam: number;
 
   @Column({ length: 7 })
